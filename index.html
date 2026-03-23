@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CartZy – Discover, Shop, Repeat</title>
+    <meta name="description" content="CartZy is a modern shopping experience. Browse categories, discover trending products, and shop from thousands of items across electronics, fashion, beauty, home and more.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="cz-app" id="cz-app">
+        <!-- Mobile Sidebar -->
+        <div class="cz-sidebar" id="cz-sidebar">
+            <div class="cz-sidebar-header">
+                <div class="cz-logo">
+                    <span class="cz-logo-mark">🛒</span>
+                    <span class="cz-logo-text">Cart<span>Zy</span></span>
+                </div>
+                <button class="cz-sidebar-close" id="cz-sidebar-close" aria-label="Close sidebar">✕</button>
+            </div>
+            <nav class="cz-sidebar-nav">
+                <a href="#" class="cz-sidebar-link cz-sidebar-link-active" data-nav="home">🏠 Home</a>
+                <a href="#categories" class="cz-sidebar-link" data-nav="categories">📦 Categories</a>
+                <a href="#trending" class="cz-sidebar-link" data-nav="trending">🔥 Trending</a>
+                <a href="#products" class="cz-sidebar-link" data-nav="products">🛍️ All Products</a>
+                <div class="cz-sidebar-divider"></div>
+                <a href="#" class="cz-sidebar-link" id="cz-sidebar-user-link">👤 Login / Sign Up</a>
+                <a href="#" class="cz-sidebar-link">📋 My Orders</a>
+                <a href="#" class="cz-sidebar-link">❤️ Wishlist</a>
+                <a href="#" class="cz-sidebar-link">💬 Help Center</a>
+            </nav>
+            <div class="cz-sidebar-actions">
+                <button id="cz-theme-toggle-sidebar" class="cz-button cz-button-outline cz-theme-toggle" type="button" aria-label="Toggle theme">
+                    <span class="cz-theme-icon" data-role="icon">🌙</span>
+                    <span>Toggle theme</span>
+                </button>
+            </div>
+        </div>
+        <div class="cz-sidebar-overlay" id="cz-sidebar-overlay"></div>
+
+        <!-- Header -->
+        <header class="cz-header" id="cz-header">
+            <div class="cz-header-left">
+                <button class="cz-hamburger" id="cz-hamburger" aria-label="Open menu">
+                    <span></span><span></span><span></span>
+                </button>
+                <div class="cz-logo">
+                    <span class="cz-logo-mark">🛒</span>
+                    <span class="cz-logo-text">Cart<span>Zy</span></span>
+                </div>
+            </div>
+            <div class="cz-search-bar" id="cz-search-bar">
+                <span class="cz-search-icon">🔍</span>
+                <input type="text" id="cz-search-input" placeholder="Search products, categories..." autocomplete="off">
+                <div class="cz-search-results" id="cz-search-results"></div>
+            </div>
+            <div class="cz-header-right">
+                <button id="cz-theme-toggle" class="cz-icon-button cz-theme-toggle" type="button" aria-label="Toggle theme">
+                    <span class="cz-theme-icon" data-role="icon">🌙</span>
+                </button>
+                <div class="cz-user-wrapper" id="cz-user-wrapper">
+                    <button class="cz-icon-button cz-user-btn" aria-label="User Account" id="cz-user-btn">
+                        <span id="cz-user-icon">👤</span>
+                    </button>
+                    <div class="cz-user-dropdown" id="cz-user-dropdown">
+                        <div class="cz-user-dropdown-header" id="cz-dropdown-header">
+                            <div class="cz-user-avatar" id="cz-dropdown-avatar">👤</div>
+                            <div class="cz-user-info">
+                                <span class="cz-user-name" id="cz-dropdown-name">Guest</span>
+                                <span class="cz-user-email" id="cz-dropdown-email"></span>
+                            </div>
+                        </div>
+                        <div class="cz-user-dropdown-divider"></div>
+                        <a href="#" class="cz-user-dropdown-item">📋 My Orders</a>
+                        <a href="#" class="cz-user-dropdown-item">❤️ My Wishlist</a>
+                        <a href="#" class="cz-user-dropdown-item">⚙️ Settings</a>
+                        <div class="cz-user-dropdown-divider"></div>
+                        <button class="cz-user-dropdown-item cz-logout-btn" id="cz-logout-btn">🚪 Logout</button>
+                    </div>
+                </div>
+                <button class="cz-icon-button" aria-label="Wishlist" id="cz-wishlist-btn">
+                    ❤️
+                </button>
+                <button class="cz-icon-button" aria-label="Cart" id="cz-cart-btn">
+                    🛒
+                    <span class="cz-cart-badge" id="cz-cart-badge">0</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="cz-main">
+            <!-- Hero -->
+            <section class="cz-hero" id="home">
+                <div class="cz-hero-content">
+                    <div class="cz-hero-badge">🔥 New Arrivals Every Day</div>
+                    <h1>Discover. Shop. <span>Repeat.</span></h1>
+                    <p>Explore thousands of products across every category — from electronics to fashion, beauty to home essentials. Your one-stop shopping destination.</p>
+                    <div class="cz-hero-actions">
+                        <a href="#categories" class="cz-button cz-button-primary cz-button-lg">Browse Categories</a>
+                        <a href="#trending" class="cz-button cz-button-ghost cz-button-lg">See Trending 🔥</a>
+                    </div>
+                    <div class="cz-hero-stats">
+                        <div class="cz-stat"><span class="cz-stat-number">200+</span><span class="cz-stat-label">Products</span></div>
+                        <div class="cz-stat"><span class="cz-stat-number">10</span><span class="cz-stat-label">Categories</span></div>
+                        <div class="cz-stat"><span class="cz-stat-number">⚡</span><span class="cz-stat-label">Fast Delivery</span></div>
+                    </div>
+                </div>
+                <div class="cz-hero-visual">
+                    <div class="cz-hero-floating-card cz-hero-fc-1">
+                        <span class="cz-hero-fc-emoji">📱</span>
+                        <span>Latest Phones</span>
+                        <strong>From ₹9,999</strong>
+                    </div>
+                    <div class="cz-hero-floating-card cz-hero-fc-2">
+                        <span class="cz-hero-fc-emoji">👟</span>
+                        <span>Trendy Shoes</span>
+                        <strong>60% Off</strong>
+                    </div>
+                    <div class="cz-hero-floating-card cz-hero-fc-3">
+                        <span class="cz-hero-fc-emoji">🎧</span>
+                        <span>Headphones</span>
+                        <strong>₹499 Only</strong>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categories -->
+            <section class="cz-section" id="categories">
+                <div class="cz-section-header">
+                    <h2>Shop by Category</h2>
+                    <button class="cz-pill-btn cz-active-filter" data-category="all" id="cz-show-all-btn">Show All</button>
+                </div>
+                <div class="cz-category-grid" id="cz-category-grid">
+                    <!-- Categories rendered by JS -->
+                </div>
+            </section>
+
+            <!-- Trending Products -->
+            <section class="cz-section" id="trending">
+                <div class="cz-section-header">
+                    <h2>🔥 Trending Now</h2>
+                    <span class="cz-section-tagline">Most popular picks this week</span>
+                </div>
+                <div class="cz-product-scroll" id="cz-trending-scroll">
+                    <!-- Trending products rendered by JS -->
+                </div>
+            </section>
+
+            <!-- Active Category Title (shown when filtering) -->
+            <div class="cz-active-category-bar" id="cz-active-category-bar" style="display:none;">
+                <h2 id="cz-active-category-title">All Products</h2>
+                <button class="cz-pill-btn" id="cz-clear-filter">✕ Clear Filter</button>
+            </div>
+
+            <!-- All Products Grid -->
+            <section class="cz-section" id="products">
+                <div class="cz-section-header" id="cz-products-header">
+                    <h2>All Products</h2>
+                    <span class="cz-section-tagline" id="cz-product-count"></span>
+                </div>
+                <div class="cz-product-grid" id="cz-product-grid">
+                    <!-- Products rendered by JS -->
+                </div>
+                <div class="cz-load-more" id="cz-load-more" style="display:none;">
+                    <button class="cz-button cz-button-outline cz-button-lg" id="cz-load-more-btn">Load More Products</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="cz-footer">
+            <div class="cz-footer-top">
+                <div>
+                    <div class="cz-logo cz-logo-small">
+                        <span class="cz-logo-mark">🛒</span>
+                        <span class="cz-logo-text">Cart<span>Zy</span></span>
+                    </div>
+                    <p class="cz-footer-text">CartZy — Your modern shopping destination. Discover trending products, explore categories, and find everything you need in one place.</p>
+                </div>
+                <div class="cz-footer-columns">
+                    <div>
+                        <h4>Shopping</h4>
+                        <a href="#categories">All Categories</a>
+                        <a href="#trending">Trending Now</a>
+                        <a href="#">New Arrivals</a>
+                        <a href="#">Deals & Offers</a>
+                    </div>
+                    <div>
+                        <h4>Support</h4>
+                        <a href="#">Help Center</a>
+                        <a href="#">Track Order</a>
+                        <a href="#">Returns</a>
+                        <a href="#">FAQs</a>
+                    </div>
+                    <div>
+                        <h4>Company</h4>
+                        <a href="#">About Us</a>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms & Conditions</a>
+                    </div>
+                </div>
+            </div>
+            <div class="cz-footer-bottom">
+                <span>© <span id="cz-year"></span> CartZy. All rights reserved.</span>
+                <span>Made with ❤️ for shoppers everywhere.</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Login/Signup Modal -->
+    <div class="cz-modal-overlay" id="cz-login-overlay">
+        <div class="cz-login-modal" id="cz-login-modal">
+            <button class="cz-modal-close" id="cz-modal-close">✕</button>
+            <div class="cz-modal-logo">
+                <span class="cz-logo-mark">🛒</span>
+                <span class="cz-logo-text">Cart<span>Zy</span></span>
+            </div>
+
+            <!-- Login Form -->
+            <div id="cz-login-form" class="cz-auth-form">
+                <h2>Welcome Back</h2>
+                <p class="cz-auth-subtitle">Log in to your account</p>
+                <div class="cz-form-group">
+                    <label for="cz-login-email">Email</label>
+                    <input type="email" id="cz-login-email" class="cz-form-input" placeholder="you@example.com" autocomplete="email">
+                </div>
+                <div class="cz-form-group">
+                    <label for="cz-login-password">Password</label>
+                    <input type="password" id="cz-login-password" class="cz-form-input" placeholder="••••••••" autocomplete="current-password">
+                </div>
+                <button class="cz-button cz-button-primary cz-button-full cz-button-lg" id="cz-login-submit">Log In</button>
+                <p class="cz-auth-toggle">Don't have an account? <a href="#" id="cz-show-signup">Sign Up</a></p>
+            </div>
+
+            <!-- Sign Up Form -->
+            <div id="cz-signup-form" class="cz-auth-form" style="display:none;">
+                <h2>Create Account</h2>
+                <p class="cz-auth-subtitle">Join CartZy today</p>
+                <div class="cz-form-group">
+                    <label for="cz-signup-name">Full Name</label>
+                    <input type="text" id="cz-signup-name" class="cz-form-input" placeholder="Your Name" autocomplete="name">
+                </div>
+                <div class="cz-form-group">
+                    <label for="cz-signup-email">Email</label>
+                    <input type="email" id="cz-signup-email" class="cz-form-input" placeholder="you@example.com" autocomplete="email">
+                </div>
+                <div class="cz-form-group">
+                    <label for="cz-signup-password">Password</label>
+                    <input type="password" id="cz-signup-password" class="cz-form-input" placeholder="••••••••" autocomplete="new-password">
+                </div>
+                <div class="cz-form-group">
+                    <label for="cz-signup-confirm">Confirm Password</label>
+                    <input type="password" id="cz-signup-confirm" class="cz-form-input" placeholder="••••••••" autocomplete="new-password">
+                </div>
+                <button class="cz-button cz-button-primary cz-button-full cz-button-lg" id="cz-signup-submit">Create Account</button>
+                <p class="cz-auth-toggle">Already have an account? <a href="#" id="cz-show-login">Log In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="./theme.js"></script>
+    <script src="./app.js"></script>
+</body>
+</html>

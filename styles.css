@@ -86,7 +86,8 @@ body {
     flex-direction: column;
     padding: 18px 20px 24px;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
+    overflow-x: hidden;
 }
 
 .cz-app::before {
@@ -1364,13 +1365,14 @@ body {
 }
 
 @media (max-width: 520px) {
-    body { padding: 0; }
+    body { padding: 0; display: block; }
     .cz-app {
         border-radius: 0;
         min-height: 100vh;
         box-shadow: none;
         border: none;
         padding: 10px 10px 16px;
+        overflow-y: auto;
     }
     .cz-hero { padding: 18px 14px; gap: 18px; }
     .cz-hero-visual { flex-direction: column; }

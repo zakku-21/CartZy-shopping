@@ -450,7 +450,7 @@ searchInput.addEventListener("input", () => {
       searchResults.innerHTML = results.map(p => {
         const srImg = getProductImagePath(p);
         return `<div class="cz-search-result-item" data-cat="${p.cat}">
-          <img class="cz-sr-img" src="${srImg}" alt="" style="width:28px;height:28px;border-radius:6px;object-fit:cover;" onerror="this.outerHTML='<span class=cz-sr-emoji>${p.emoji}</span>'">
+          <span class="cz-sr-emoji" style="font-size:20px;">${p.emoji}</span>
           <span class="cz-sr-name">${p.name}</span>
           <span class="cz-sr-price">₹${p.price.toLocaleString()}</span>
         </div>`;
@@ -476,20 +476,37 @@ document.addEventListener("click", (e) => {
   if (!e.target.closest(".cz-search-bar")) searchResults.classList.remove("active");
 });
 
+// ── Scroll Lock Manager ──
+let scrollLockCount = 0;
+function lockScroll() {
+  scrollLockCount++;
+  if (scrollLockCount === 1) {
+    document.body.style.overflow = "hidden";
+    document.body.style.paddingRight = "8px"; // Prevent layout shift from scrollbar
+  }
+}
+function unlockScroll() {
+  scrollLockCount = Math.max(0, scrollLockCount - 1);
+  if (scrollLockCount === 0) {
+    document.body.style.overflow = "";
+    document.body.style.paddingRight = "";
+  }
+}
+
 // ── Sidebar ──
 const hamburger = $("cz-hamburger");
 const sidebar = $("cz-sidebar");
 const sidebarClose = $("cz-sidebar-close");
 const sidebarOverlay = $("cz-sidebar-overlay");
 
-function openSidebar() { sidebar.classList.add("active"); sidebarOverlay.classList.add("active"); hamburger.classList.add("active"); document.body.style.overflow = "hidden"; }
-function closeSidebar() { sidebar.classList.remove("active"); sidebarOverlay.classList.remove("active"); hamburger.classList.remove("active"); document.body.style.overflow = ""; }
+function openSidebar() { sidebar.classList.add("active"); sidebarOverlay.classList.add("active"); hamburger.classList.add("active"); lockScroll(); }
+function closeSidebar() { sidebar.classList.remove("active"); sidebarOverlay.classList.remove("active"); hamburger.classList.remove("active"); unlockScroll(); }
 
 hamburger.addEventListener("click", openSidebar);
 sidebarClose.addEventListener("click", closeSidebar);
 sidebarOverlay.addEventListener("click", closeSidebar);
 sidebar.querySelectorAll(".cz-sidebar-link").forEach(l => l.addEventListener("click", closeSidebar));
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeSidebar(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && sidebar.classList.contains("active")) closeSidebar(); });
 
 // ── Year ──
 const yearEl = $("cz-year");
@@ -519,7 +536,7 @@ let currentUser = JSON.parse(localStorage.getItem("cz-user") || "null");
 
 function openLoginModal() {
   loginOverlay.classList.add("active");
-  document.body.style.overflow = "hidden";
+  lockScroll();
   loginForm.style.display = "";
   signupForm.style.display = "none";
   closeSidebar();
@@ -527,7 +544,7 @@ function openLoginModal() {
 
 function closeLoginModal() {
   loginOverlay.classList.remove("active");
-  document.body.style.overflow = "";
+  unlockScroll();
   clearFormErrors();
 }
 

@@ -210,6 +210,171 @@
         </footer>
     </div>
 
+    <!-- Cart Modal -->
+    <div class="cz-modal-overlay" id="cz-cart-overlay">
+        <div class="cz-cart-modal" id="cz-cart-modal">
+            <button class="cz-modal-close" id="cz-cart-modal-close">✕</button>
+            <h2 class="cz-cart-modal-title">🛒 Your Cart</h2>
+            
+            <!-- Empty Cart State -->
+            <div class="cz-cart-empty" id="cz-cart-empty">
+                <div class="cz-cart-empty-icon">🛒</div>
+                <h3>Your cart is empty</h3>
+                <p>Add some products to get started!</p>
+                <button class="cz-button cz-button-primary" id="cz-cart-shop-btn">Continue Shopping</button>
+            </div>
+            
+            <!-- Cart Items -->
+            <div class="cz-cart-content" id="cz-cart-content" style="display:none;">
+                <div class="cz-cart-items" id="cz-cart-items">
+                    <!-- Cart items rendered by JS -->
+                </div>
+                
+                <!-- Cart Summary -->
+                <div class="cz-cart-summary">
+                    <div class="cz-cart-summary-row">
+                        <span>Subtotal</span>
+                        <span id="cz-cart-subtotal">₹0</span>
+                    </div>
+                    <div class="cz-cart-summary-row">
+                        <span>Delivery</span>
+                        <span id="cz-cart-delivery">FREE</span>
+                    </div>
+                    <div class="cz-cart-divider"></div>
+                    <div class="cz-cart-summary-row cz-cart-total">
+                        <span>Total</span>
+                        <span id="cz-cart-total">₹0</span>
+                    </div>
+                    <button class="cz-button cz-button-primary cz-button-full cz-button-lg" id="cz-checkout-btn">
+                        Proceed to Checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="cz-modal-overlay" id="cz-checkout-overlay">
+        <div class="cz-checkout-modal" id="cz-checkout-modal">
+            <button class="cz-modal-close" id="cz-checkout-modal-close">✕</button>
+            <h2 class="cz-checkout-title">💳 Checkout</h2>
+            
+            <div class="cz-checkout-steps">
+                <div class="cz-checkout-step active" data-step="1">
+                    <span class="cz-step-number">1</span>
+                    <span class="cz-step-label">Payment</span>
+                </div>
+                <div class="cz-checkout-step-line"></div>
+                <div class="cz-checkout-step" data-step="2">
+                    <span class="cz-step-number">2</span>
+                    <span class="cz-step-label">Confirm</span>
+                </div>
+            </div>
+            
+            <!-- Payment Method Selection -->
+            <div class="cz-checkout-payment" id="cz-checkout-payment">
+                <h3>Choose Payment Method</h3>
+                
+                <div class="cz-payment-methods">
+                    <!-- UPI Option -->
+                    <div class="cz-payment-option" data-method="upi">
+                        <div class="cz-payment-icon">📱</div>
+                        <div class="cz-payment-info">
+                            <h4>UPI Payment</h4>
+                            <p>GPay, PhonePe, Paytm, etc.</p>
+                        </div>
+                        <div class="cz-payment-radio"></div>
+                    </div>
+                    
+                    <!-- Debit Card Option -->
+                    <div class="cz-payment-option" data-method="debit">
+                        <div class="cz-payment-icon">💳</div>
+                        <div class="cz-payment-info">
+                            <h4>Debit Card</h4>
+                            <p>Visa, Mastercard, RuPay</p>
+                        </div>
+                        <div class="cz-payment-radio"></div>
+                    </div>
+                    
+                    <!-- COD Option -->
+                    <div class="cz-payment-option" data-method="cod">
+                        <div class="cz-payment-icon">💵</div>
+                        <div class="cz-payment-info">
+                            <h4>Cash on Delivery</h4>
+                            <p>Pay when you receive</p>
+                        </div>
+                        <div class="cz-payment-radio"></div>
+                    </div>
+                </div>
+                
+                <!-- UPI Form -->
+                <div class="cz-payment-form" id="cz-upi-form" style="display:none;">
+                    <div class="cz-form-group">
+                        <label for="cz-upi-id">UPI ID</label>
+                        <input type="text" id="cz-upi-id" class="cz-form-input" placeholder="yourname@upi" autocomplete="off">
+                        <span class="cz-form-hint">Example: yourname@gpay</span>
+                    </div>
+                    <button class="cz-button cz-button-primary cz-button-full" id="cz-upi-pay-btn">Pay with UPI</button>
+                </div>
+                
+                <!-- Debit Card Form -->
+                <div class="cz-payment-form" id="cz-debit-form" style="display:none;">
+                    <div class="cz-form-group">
+                        <label for="cz-card-number">Card Number</label>
+                        <input type="text" id="cz-card-number" class="cz-form-input" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="off">
+                    </div>
+                    <div class="cz-form-row">
+                        <div class="cz-form-group">
+                            <label for="cz-card-expiry">Expiry Date</label>
+                            <input type="text" id="cz-card-expiry" class="cz-form-input" placeholder="MM/YY" maxlength="5" autocomplete="off">
+                        </div>
+                        <div class="cz-form-group">
+                            <label for="cz-card-cvv">CVV</label>
+                            <input type="password" id="cz-card-cvv" class="cz-form-input" placeholder="•••" maxlength="3" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="cz-form-group">
+                        <label for="cz-card-name">Cardholder Name</label>
+                        <input type="text" id="cz-card-name" class="cz-form-input" placeholder="Name on card" autocomplete="off">
+                    </div>
+                    <button class="cz-button cz-button-primary cz-button-full" id="cz-debit-pay-btn">Pay Now</button>
+                </div>
+                
+                <button class="cz-button cz-button-outline cz-button-full" id="cz-payment-continue-btn" style="display:none;">Continue</button>
+            </div>
+            
+            <!-- Order Confirmation -->
+            <div class="cz-checkout-confirm" id="cz-checkout-confirm" style="display:none;">
+                <div class="cz-order-success">
+                    <div class="cz-order-success-icon">✅</div>
+                    <h3>Order Placed Successfully!</h3>
+                    <p class="cz-order-id">Order ID: <span id="cz-order-id">CZ123456</span></p>
+                </div>
+                
+                <div class="cz-order-summary">
+                    <h4>Order Summary</h4>
+                    <div class="cz-order-items" id="cz-order-items">
+                        <!-- Order items rendered by JS -->
+                    </div>
+                    <div class="cz-order-total">
+                        <span>Total Paid</span>
+                        <span id="cz-order-total">₹0</span>
+                    </div>
+                    <div class="cz-order-method">
+                        <span>Payment Method</span>
+                        <span id="cz-order-method">-</span>
+                    </div>
+                </div>
+                
+                <div class="cz-order-delivery">
+                    <p>🚚 Estimated delivery: <strong>3-5 business days</strong></p>
+                </div>
+                
+                <button class="cz-button cz-button-primary cz-button-full" id="cz-order-done-btn">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Login/Signup Modal -->
     <div class="cz-modal-overlay" id="cz-login-overlay">
         <div class="cz-login-modal" id="cz-login-modal">

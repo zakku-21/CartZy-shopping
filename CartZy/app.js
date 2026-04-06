@@ -256,6 +256,19 @@ let cartCount = 0;
 let productsPerPage = 20;
 let currentPage = 1;
 
+// Cart State - Array of {productId, quantity}
+let cart = JSON.parse(localStorage.getItem("cz-cart") || "[]");
+
+// Update cart count from cart array
+function updateCartCount() {
+  cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  cartBadge.textContent = cartCount;
+  localStorage.setItem("cz-cart", JSON.stringify(cart));
+}
+
+// Initialize cart count
+updateCartCount();
+
 // ── DOM Refs ──
 const $ = id => document.getElementById(id);
 const categoryGrid = $("cz-category-grid");
@@ -328,7 +341,8 @@ function productCard(p, isTrending) {
       <div class="cz-product-image-bg" style="background:linear-gradient(135deg, ${color}22, ${color}11)"></div>
       ${p.trending && isTrending ? '<div class="cz-product-trending-badge">🔥 Trending</div>' : ''}
       <button class="cz-product-wishlist" data-wishlist="${p.id}">🤍</button>
-      <img src="${imgPath}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="cz-img-placeholder" style="display:none;"></div>
+      <img src="${imgPath}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';this.nextElementSibling.textContent='${p.emoji}';">
+      <div class="cz-img-placeholder" style="display:none;">${p.emoji}</div>
     </div>
     <div class="cz-product-body">
       <div class="cz-product-category-tag">${getCategoryName(p.cat)}</div>
@@ -409,14 +423,113 @@ loadMoreBtn.addEventListener("click", () => {
   renderProducts();
 });
 
-// ── Cart ──
+// ── Cart System ──
+function addToCart(productId) {
+  const existing = cart.find(item => item.productId === productId);
+  if (existing) {
+    existing.quantity++;
+  } else {
+    cart.push({ productId, quantity: 1 });
+  }
+  updateCartCount();
+}
+
+function removeFromCart(productId) {
+  cart = cart.filter(item => item.productId !== productId);
+  updateCartCount();
+}
+
+function updateCartQuantity(productId, delta) {
+  const item = cart.find(item => item.productId === productId);
+  if (!item) return;
+  item.quantity += delta;
+  if (item.quantity <= 0) {
+    removeFromCart(productId);
+  } else {
+    updateCartCount();
+  }
+}
+
+function getCartTotal() {
+  return cart.reduce((sum, item) => {
+    const product = PRODUCTS.find(p => p.id === item.productId);
+    return sum + (product ? product.price * item.quantity : 0);
+  }, 0);
+}
+
+function renderCartItems() {
+  const cartItemsContainer = $("cz-cart-items");
+  const cartEmpty = $("cz-cart-empty");
+  const cartContent = $("cz-cart-content");
+  
+  if (cart.length === 0) {
+    cartEmpty.style.display = "";
+    cartContent.style.display = "none";
+    return;
+  }
+  
+  cartEmpty.style.display = "none";
+  cartContent.style.display = "flex";
+  
+  cartItemsContainer.innerHTML = cart.map(item => {
+    const product = PRODUCTS.find(p => p.id === item.productId);
+    if (!product) return "";
+    return `<div class="cz-cart-item" data-id="${product.id}">
+      <div class="cz-cart-item-image">${product.emoji}</div>
+      <div class="cz-cart-item-details">
+        <div class="cz-cart-item-name">${product.name}</div>
+        <div class="cz-cart-item-price">₹${product.price.toLocaleString()}</div>
+        <div class="cz-cart-item-controls">
+          <button class="cz-qty-btn cz-qty-minus" data-id="${product.id}">−</button>
+          <span class="cz-qty-value">${item.quantity}</span>
+          <button class="cz-qty-btn cz-qty-plus" data-id="${product.id}">+</button>
+          <button class="cz-cart-item-remove" data-id="${product.id}">🗑️</button>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+  
+  // Update summary
+  const total = getCartTotal();
+  $("cz-cart-subtotal").textContent = `₹${total.toLocaleString()}`;
+  $("cz-cart-total").textContent = `₹${total.toLocaleString()}`;
+}
+
+// Cart Modal
+const cartOverlay = $("cz-cart-overlay");
+const cartModal = $("cz-cart-modal");
+const cartBtn = $("cz-cart-btn");
+const cartModalClose = $("cz-cart-modal-close");
+const cartShopBtn = $("cz-cart-shop-btn");
+const checkoutBtn = $("cz-checkout-btn");
+
+function openCartModal() {
+  renderCartItems();
+  cartOverlay.classList.add("active");
+  lockScroll();
+}
+
+function closeCartModal() {
+  cartOverlay.classList.remove("active");
+  unlockScroll();
+}
+
+cartBtn.addEventListener("click", openCartModal);
+cartModalClose.addEventListener("click", closeCartModal);
+cartOverlay.addEventListener("click", (e) => {
+  if (e.target === cartOverlay) closeCartModal();
+});
+cartShopBtn?.addEventListener("click", closeCartModal);
+
+// Cart item interactions
 document.addEventListener("click", (e) => {
+  // Add to cart button
   if (e.target.closest(".cz-add-to-cart")) {
-    cartCount++;
-    cartBadge.textContent = cartCount;
+    const btn = e.target.closest(".cz-add-to-cart");
+    const productId = parseInt(btn.dataset.id);
+    addToCart(productId);
     cartBadge.style.transform = "scale(1.3)";
     setTimeout(() => cartBadge.style.transform = "scale(1)", 200);
-    const btn = e.target.closest(".cz-add-to-cart");
     btn.textContent = "✓ Added!";
     btn.style.background = "linear-gradient(135deg, #34d399, #059669)";
     setTimeout(() => {
@@ -424,6 +537,185 @@ document.addEventListener("click", (e) => {
       btn.style.background = "";
     }, 1500);
   }
+  
+  // Quantity minus
+  if (e.target.closest(".cz-qty-minus")) {
+    const productId = parseInt(e.target.closest(".cz-qty-minus").dataset.id);
+    updateCartQuantity(productId, -1);
+    renderCartItems();
+  }
+  
+  // Quantity plus
+  if (e.target.closest(".cz-qty-plus")) {
+    const productId = parseInt(e.target.closest(".cz-qty-plus").dataset.id);
+    updateCartQuantity(productId, 1);
+    renderCartItems();
+  }
+  
+  // Remove item
+  if (e.target.closest(".cz-cart-item-remove")) {
+    const productId = parseInt(e.target.closest(".cz-cart-item-remove").dataset.id);
+    removeFromCart(productId);
+    renderCartItems();
+  }
+});
+
+// ── Checkout System ──
+const checkoutOverlay = $("cz-checkout-overlay");
+const checkoutModal = $("cz-checkout-modal");
+const checkoutModalClose = $("cz-checkout-modal-close");
+const checkoutPayment = $("cz-checkout-payment");
+const checkoutConfirm = $("cz-checkout-confirm");
+const paymentContinueBtn = $("cz-payment-continue-btn");
+const orderDoneBtn = $("cz-order-done-btn");
+
+let selectedPaymentMethod = null;
+
+function openCheckoutModal() {
+  if (cart.length === 0) return;
+  closeCartModal();
+  resetCheckout();
+  checkoutOverlay.classList.add("active");
+  lockScroll();
+}
+
+function closeCheckoutModal() {
+  checkoutOverlay.classList.remove("active");
+  unlockScroll();
+}
+
+function resetCheckout() {
+  selectedPaymentMethod = null;
+  checkoutPayment.style.display = "";
+  checkoutConfirm.style.display = "none";
+  document.querySelectorAll(".cz-checkout-step").forEach((step, i) => {
+    step.classList.remove("active", "completed");
+    if (i === 0) step.classList.add("active");
+  });
+  document.querySelectorAll(".cz-payment-option").forEach(opt => opt.classList.remove("selected"));
+  document.querySelectorAll(".cz-payment-form").forEach(form => form.style.display = "none");
+  paymentContinueBtn.style.display = "none";
+}
+
+function showOrderConfirmation(method) {
+  checkoutPayment.style.display = "none";
+  checkoutConfirm.style.display = "";
+  
+  // Update steps
+  document.querySelectorAll(".cz-checkout-step").forEach((step, i) => {
+    step.classList.remove("active");
+    step.classList.add("completed");
+  });
+  
+  // Generate order ID
+  const orderId = "CZ" + Date.now().toString().slice(-6);
+  $("cz-order-id").textContent = orderId;
+  
+  // Render order items
+  const orderItems = $("cz-order-items");
+  orderItems.innerHTML = cart.map(item => {
+    const product = PRODUCTS.find(p => p.id === item.productId);
+    if (!product) return "";
+    return `<div class="cz-order-item">
+      <span class="cz-order-item-name">${product.name} × ${item.quantity}</span>
+      <span class="cz-order-item-qty">₹${(product.price * item.quantity).toLocaleString()}</span>
+    </div>`;
+  }).join("");
+  
+  $("cz-order-total").textContent = `₹${getCartTotal().toLocaleString()}`;
+  
+  const methodNames = { upi: "UPI Payment", debit: "Debit Card", cod: "Cash on Delivery" };
+  $("cz-order-method").textContent = methodNames[method] || method;
+}
+
+checkoutBtn?.addEventListener("click", openCheckoutModal);
+checkoutModalClose.addEventListener("click", closeCheckoutModal);
+checkoutOverlay.addEventListener("click", (e) => {
+  if (e.target === checkoutOverlay) closeCheckoutModal();
+});
+orderDoneBtn?.addEventListener("click", () => {
+  cart = [];
+  updateCartCount();
+  closeCheckoutModal();
+});
+
+// Payment method selection
+document.querySelectorAll(".cz-payment-option").forEach(option => {
+  option.addEventListener("click", () => {
+    document.querySelectorAll(".cz-payment-option").forEach(o => o.classList.remove("selected"));
+    option.classList.add("selected");
+    selectedPaymentMethod = option.dataset.method;
+    
+    // Hide all forms
+    document.querySelectorAll(".cz-payment-form").forEach(form => form.style.display = "none");
+    paymentContinueBtn.style.display = "none";
+    
+    // Show relevant form or continue button
+    if (selectedPaymentMethod === "cod") {
+      paymentContinueBtn.style.display = "block";
+    } else if (selectedPaymentMethod === "upi") {
+      $("cz-upi-form").style.display = "block";
+    } else if (selectedPaymentMethod === "debit") {
+      $("cz-debit-form").style.display = "block";
+    }
+  });
+});
+
+// Payment form submissions
+$("cz-upi-pay-btn")?.addEventListener("click", () => {
+  const upiId = $("cz-upi-id").value.trim();
+  if (!upiId || !upiId.includes("@")) {
+    alert("Please enter a valid UPI ID");
+    return;
+  }
+  showOrderConfirmation("upi");
+});
+
+$("cz-debit-pay-btn")?.addEventListener("click", () => {
+  const cardNumber = $("cz-card-number").value.trim();
+  const expiry = $("cz-card-expiry").value.trim();
+  const cvv = $("cz-card-cvv").value.trim();
+  const name = $("cz-card-name").value.trim();
+  
+  if (!cardNumber || cardNumber.length < 16) {
+    alert("Please enter a valid card number");
+    return;
+  }
+  if (!expiry || expiry.length < 5) {
+    alert("Please enter a valid expiry date");
+    return;
+  }
+  if (!cvv || cvv.length < 3) {
+    alert("Please enter a valid CVV");
+    return;
+  }
+  if (!name) {
+    alert("Please enter the cardholder name");
+    return;
+  }
+  showOrderConfirmation("debit");
+});
+
+paymentContinueBtn?.addEventListener("click", () => {
+  if (selectedPaymentMethod) {
+    showOrderConfirmation(selectedPaymentMethod);
+  }
+});
+
+// Card number formatting
+$("cz-card-number")?.addEventListener("input", (e) => {
+  let value = e.target.value.replace(/\D/g, "");
+  value = value.replace(/(\d{4})(?=\d)/g, "$1 ");
+  e.target.value = value;
+});
+
+// Expiry date formatting
+$("cz-card-expiry")?.addEventListener("input", (e) => {
+  let value = e.target.value.replace(/\D/g, "");
+  if (value.length >= 2) {
+    value = value.slice(0, 2) + "/" + value.slice(2);
+  }
+  e.target.value = value;
 });
 
 // ── Wishlist ──

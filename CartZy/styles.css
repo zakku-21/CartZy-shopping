@@ -1128,7 +1128,7 @@ body {
     text-decoration: none;
     cursor: pointer;
     background: none;
-    border: none;
+    border: none; 
     width: 100%;
     text-align: left;
     font-family: inherit;

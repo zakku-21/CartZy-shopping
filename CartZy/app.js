@@ -15,7 +15,7 @@ const CATEGORIES = [
 ];
 
 // ── Products (20+ per category) ──
-const PRODUCTS = [
+const PRODUCTS = [ 
   // ── Electronics (22) ──
   { id:1, name:"Wireless Bluetooth Earbuds Pro", cat:"electronics", emoji:"🎧", price:1299, mrp:2999, rating:4.5, reviews:3420, trending:true },
   { id:2, name:"Smart Watch Fitness Tracker", cat:"electronics", emoji:"⌚", price:1999, mrp:4999, rating:4.3, reviews:2180, trending:true },

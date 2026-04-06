@@ -12,7 +12,7 @@
       const icon = btn.querySelector('[data-role="icon"]');
       if (icon) icon.textContent = theme === "dark" ? "🌙" : "☀️";
     });
-  }
+  } 
   function toggleTheme() {
     const current = document.documentElement.getAttribute("data-theme") || "dark";
     const next = current === "dark" ? "light" : "dark";

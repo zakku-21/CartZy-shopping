@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Mobile-friendly GST rate calculator for adding or extracting GST with CGST and SGST split.">
+  <title>GST Rate Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="calculator-card">
+      <div class="hero-copy">
+        <p class="eyebrow">Tax Tool</p>
+        <h1>GST Rate Calculator</h1>
+        <p class="intro">
+          Calculate GST instantly for inclusive or exclusive pricing. Enter an amount,
+          choose a GST rate, and view the tax breakdown in real time.
+        </p>
+        <a class="help-link" href="#gst-rate-helps">GST Rate Helps</a>
+      </div>
+
+      <div class="calculator-grid">
+        <form id="gstForm" class="calculator-form">
+          <div class="field">
+            <span>Amount (₹)</span>
+            <div class="amount-entry-box">
+              <input type="text" id="amount" inputmode="decimal" placeholder="Enter amount or expression" required>
+              <p class="entry-hint">Use keypad or type directly. Supports +, −, ×, ÷ and decimals.</p>
+            </div>
+
+            <div class="calculator-pad" aria-label="Calculator number pad">
+              <button type="button" class="pad-btn pad-btn-muted" data-action="clear">AC</button>
+              <button type="button" class="pad-btn pad-btn-muted" data-action="backspace">⌫</button>
+              <button type="button" class="pad-btn pad-btn-operator" data-value="%">%</button>
+              <button type="button" class="pad-btn pad-btn-operator" data-value="/">÷</button>
+
+              <button type="button" class="pad-btn" data-value="7">7</button>
+              <button type="button" class="pad-btn" data-value="8">8</button>
+              <button type="button" class="pad-btn" data-value="9">9</button>
+              <button type="button" class="pad-btn pad-btn-operator" data-value="*">×</button>
+
+              <button type="button" class="pad-btn" data-value="4">4</button>
+              <button type="button" class="pad-btn" data-value="5">5</button>
+              <button type="button" class="pad-btn" data-value="6">6</button>
+              <button type="button" class="pad-btn pad-btn-operator" data-value="-">−</button>
+
+              <button type="button" class="pad-btn" data-value="1">1</button>
+              <button type="button" class="pad-btn" data-value="2">2</button>
+              <button type="button" class="pad-btn" data-value="3">3</button>
+              <button type="button" class="pad-btn pad-btn-operator" data-value="+">+</button>
+
+              <button type="button" class="pad-btn pad-btn-zero" data-value="0">0</button>
+              <button type="button" class="pad-btn" data-value=".">.</button>
+              <button type="button" class="pad-btn pad-btn-equals" data-action="evaluate">=</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <span>GST Rate</span>
+            <div class="rate-input-wrap">
+              <input type="number" id="gstRate" min="0" step="0.01" value="18" placeholder="Enter GST %" required>
+              <span class="rate-suffix">%</span>
+            </div>
+            <div class="quick-rates" aria-label="Common GST rate options">
+              <button type="button" class="chip is-active" data-rate="3">3%</button>
+              <button type="button" class="chip" data-rate="5">5%</button>
+              <button type="button" class="chip" data-rate="12">12%</button>
+              <button type="button" class="chip" data-rate="18">18%</button>
+              <button type="button" class="chip" data-rate="28">28%</button>
+            </div>
+          </div>
+
+          <fieldset class="mode-switch">
+            <legend>Calculation Type</legend>
+            <label>
+              <input type="radio" name="calculationType" value="exclusive" checked>
+              <span>Add GST to amount</span>
+            </label>
+            <label>
+              <input type="radio" name="calculationType" value="inclusive">
+              <span>Extract GST from amount</span>
+            </label>
+          </fieldset>
+
+          <div class="button-row">
+            <button type="submit" class="btn btn-primary">Calculate</button>
+            <button type="button" id="resetBtn" class="btn btn-secondary">Reset</button>
+          </div>
+        </form>
+
+        <section class="results-panel" aria-live="polite">
+          <h2>Calculation Summary</h2>
+
+          <div class="result-list">
+            <article class="result-item highlight">
+              <span class="label">Final Amount</span>
+              <strong id="finalAmount">₹0.00</strong>
+            </article>
+
+            <article class="result-item">
+              <span class="label">Original Amount</span>
+              <strong id="baseAmount">₹0.00</strong>
+            </article>
+
+            <article class="result-item">
+              <span class="label">GST Amount</span>
+              <strong id="gstAmount">₹0.00</strong>
+            </article>
+
+            <article class="result-item">
+              <span class="label">CGST / SGST</span>
+              <strong id="splitTax">₹0.00 / ₹0.00</strong>
+            </article>
+
+            <article class="result-item">
+              <span class="label">Selected Rate</span>
+              <strong id="selectedRate">18%</strong>
+            </article>
+          </div>
+
+          <p id="resultNote" class="result-note">
+            Enter an amount and calculate to see the GST breakup.
+          </p>
+        </section>
+      </div>
+    </section>
+
+    <section id="gst-rate-helps" class="info-card">
+      <div class="info-card-header">
+        <p class="eyebrow">GST Rate Helps</p>
+        <h2>Common GST rates and calculation help</h2>
+        <p class="intro">
+          Use these quick references to understand where GST rates are commonly applied
+          and how the tax amount changes your pricing.
+        </p>
+      </div>
+
+      <div class="info-grid">
+        <article class="info-item">
+          <h3>Popular GST slabs</h3>
+          <ul class="info-list">
+            <li><strong>3%</strong> — selected gold and jewellery items</li>
+            <li><strong>5%</strong> — essentials, rail tickets, packaged foods</li>
+            <li><strong>12%</strong> — business class services and processed goods</li>
+            <li><strong>18%</strong> — most products and professional services</li>
+            <li><strong>28%</strong> — luxury goods and premium products</li>
+          </ul>
+        </article>
+
+        <article class="info-item">
+          <h3>Quick calculation data</h3>
+          <div class="data-points">
+            <div class="data-row">
+              <span>₹1,000 at 5%</span>
+              <strong>GST ₹50 · Total ₹1,050</strong>
+            </div>
+            <div class="data-row">
+              <span>₹1,000 at 12%</span>
+              <strong>GST ₹120 · Total ₹1,120</strong>
+            </div>
+            <div class="data-row">
+              <span>₹1,000 at 18%</span>
+              <strong>GST ₹180 · Total ₹1,180</strong>
+            </div>
+            <div class="data-row">
+              <span>₹1,000 at 28%</span>
+              <strong>GST ₹280 · Total ₹1,280</strong>
+            </div>
+          </div>
+        </article>
+
+        <article class="info-item">
+          <h3>Formula guide</h3>
+          <ul class="info-list">
+            <li><strong>Add GST:</strong> Amount × GST rate ÷ 100</li>
+            <li><strong>Total with GST:</strong> Base amount + GST amount</li>
+            <li><strong>Extract GST:</strong> Inclusive amount × rate ÷ (100 + rate)</li>
+            <li><strong>CGST / SGST split:</strong> GST amount ÷ 2</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#07070f" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f4f4fb" media="(prefers-color-scheme: light)">
     <title>CartZy – Discover, Shop, Repeat</title>
     <meta name="description" content="CartZy is a modern shopping experience. Browse categories, discover trending products, and shop from thousands of items across electronics, fashion, beauty, home and more.">
     <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="cz-app" id="cz-app">
+    <div class="cz-app" id="cz-app"> 
         <!-- Mobile Sidebar -->
         <div class="cz-sidebar" id="cz-sidebar">
             <div class="cz-sidebar-header">
@@ -179,6 +179,23 @@
                         <span class="cz-logo-text">Cart<span>Zy</span></span>
                     </div>
                     <p class="cz-footer-text">CartZy — Your modern shopping destination. Discover trending products, explore categories, and find everything you need in one place.</p>
+                    <nav class="cz-social-links" aria-label="Social media">
+                        <a href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="X">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3L12 14.6 5.5 22H2.4l7.3-8.4L1.8 2h6.5l4.5 6.8L18.9 2Zm-1.1 18h1.7L7.3 3.9H5.5L17.8 20Z"/></svg>
+                        </a>
+                        <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle class="cz-social-icon-fill" cx="18" cy="6" r="1"/></svg>
+                        </a>
+                        <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.5 1.6-1.5h1.7V3.6c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H7.3V13h2.8v8h3.4Z"/></svg>
+                        </a>
+                        <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
+                        </a>
+                        <a href="https://www.twitch.tv/" target="_blank" rel="noopener noreferrer" aria-label="Twitch">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 2h19v13l-5 5h-4l-3 3H7v-3H2V5l2-3Zm1 2L4 6v12h5v3l3-3h5l4-4V4H5Zm12 2h2v6h-2V6Zm-5 0h2v6h-2V6Z"/></svg>
+                        </a>
+                    </nav>
                 </div>
                 <div class="cz-footer-columns">
                     <div>
@@ -208,6 +225,171 @@
                 <span>Made with ❤️ for shoppers everywhere.</span>
             </div>
         </footer>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="cz-modal-overlay" id="cz-cart-overlay">
+        <div class="cz-cart-modal" id="cz-cart-modal">
+            <button class="cz-modal-close" id="cz-cart-modal-close">✕</button>
+            <h2 class="cz-cart-modal-title">🛒 Your Cart</h2>
+            
+            <!-- Empty Cart State -->
+            <div class="cz-cart-empty" id="cz-cart-empty">
+                <div class="cz-cart-empty-icon">🛒</div>
+                <h3>Your cart is empty</h3>
+                <p>Add some products to get started!</p>
+                <button class="cz-button cz-button-primary" id="cz-cart-shop-btn">Continue Shopping</button>
+            </div>
+            
+            <!-- Cart Items -->
+            <div class="cz-cart-content" id="cz-cart-content" style="display:none;">
+                <div class="cz-cart-items" id="cz-cart-items">
+                    <!-- Cart items rendered by JS -->
+                </div>
+                
+                <!-- Cart Summary -->
+                <div class="cz-cart-summary">
+                    <div class="cz-cart-summary-row">
+                        <span>Subtotal</span>
+                        <span id="cz-cart-subtotal">₹0</span>
+                    </div>
+                    <div class="cz-cart-summary-row">
+                        <span>Delivery</span>
+                        <span id="cz-cart-delivery">FREE</span>
+                    </div>
+                    <div class="cz-cart-divider"></div>
+                    <div class="cz-cart-summary-row cz-cart-total">
+                        <span>Total</span>
+                        <span id="cz-cart-total">₹0</span>
+                    </div>
+                    <button class="cz-button cz-button-primary cz-button-full cz-button-lg" id="cz-checkout-btn">
+                        Proceed to Checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="cz-modal-overlay" id="cz-checkout-overlay">
+        <div class="cz-checkout-modal" id="cz-checkout-modal">
+            <button class="cz-modal-close" id="cz-checkout-modal-close">✕</button>
+            <h2 class="cz-checkout-title">💳 Checkout</h2>
+            
+            <div class="cz-checkout-steps">
+                <div class="cz-checkout-step active" data-step="1">
+                    <span class="cz-step-number">1</span>
+                    <span class="cz-step-label">Payment</span>
+                </div>
+                <div class="cz-checkout-step-line"></div>
+                <div class="cz-checkout-step" data-step="2">
+                    <span class="cz-step-number">2</span>
+                    <span class="cz-step-label">Confirm</span>
+                </div>
+            </div>
+            
+            <!-- Payment Method Selection -->
+            <div class="cz-checkout-payment" id="cz-checkout-payment">
+                <h3>Choose Payment Method</h3>
+                
+                <div class="cz-payment-methods">
+                    <!-- UPI Option -->
+                    <div class="cz-payment-option" data-method="upi">
+                        <div class="cz-payment-icon">📱</div>
+                        <div class="cz-payment-info">
+                            <h4>UPI Payment</h4>
+                            <p>GPay, PhonePe, Paytm, etc.</p>
+                        </div>
+                        <div class="cz-payment-radio"></div>
+                    </div>
+                    
+                    <!-- Debit Card Option -->
+                    <div class="cz-payment-option" data-method="debit">
+                        <div class="cz-payment-icon">💳</div>
+                        <div class="cz-payment-info">
+                            <h4>Debit Card</h4>
+                            <p>Visa, Mastercard, RuPay</p>
+                        </div>
+                        <div class="cz-payment-radio"></div>
+                    </div>
+                    
+                    <!-- COD Option -->
+                    <div class="cz-payment-option" data-method="cod">
+                        <div class="cz-payment-icon">💵</div>
+                        <div class="cz-payment-info">
+                            <h4>Cash on Delivery</h4>
+                            <p>Pay when you receive</p>
+                        </div>
+                        <div class="cz-payment-radio"></div>
+                    </div>
+                </div>
+                
+                <!-- UPI Form -->
+                <div class="cz-payment-form" id="cz-upi-form" style="display:none;">
+                    <div class="cz-form-group">
+                        <label for="cz-upi-id">UPI ID</label>
+                        <input type="text" id="cz-upi-id" class="cz-form-input" placeholder="yourname@upi" autocomplete="off">
+                        <span class="cz-form-hint">Example: yourname@gpay</span>
+                    </div>
+                    <button class="cz-button cz-button-primary cz-button-full" id="cz-upi-pay-btn">Pay with UPI</button>
+                </div>
+                
+                <!-- Debit Card Form -->
+                <div class="cz-payment-form" id="cz-debit-form" style="display:none;">
+                    <div class="cz-form-group">
+                        <label for="cz-card-number">Card Number</label>
+                        <input type="text" id="cz-card-number" class="cz-form-input" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="off">
+                    </div>
+                    <div class="cz-form-row">
+                        <div class="cz-form-group">
+                            <label for="cz-card-expiry">Expiry Date</label>
+                            <input type="text" id="cz-card-expiry" class="cz-form-input" placeholder="MM/YY" maxlength="5" autocomplete="off">
+                        </div>
+                        <div class="cz-form-group">
+                            <label for="cz-card-cvv">CVV</label>
+                            <input type="password" id="cz-card-cvv" class="cz-form-input" placeholder="•••" maxlength="3" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="cz-form-group">
+                        <label for="cz-card-name">Cardholder Name</label>
+                        <input type="text" id="cz-card-name" class="cz-form-input" placeholder="Name on card" autocomplete="off">
+                    </div>
+                    <button class="cz-button cz-button-primary cz-button-full" id="cz-debit-pay-btn">Pay Now</button>
+                </div>
+                
+                <button class="cz-button cz-button-outline cz-button-full" id="cz-payment-continue-btn" style="display:none;">Continue</button>
+            </div>
+            
+            <!-- Order Confirmation -->
+            <div class="cz-checkout-confirm" id="cz-checkout-confirm" style="display:none;">
+                <div class="cz-order-success">
+                    <div class="cz-order-success-icon">✅</div>
+                    <h3>Order Placed Successfully!</h3>
+                    <p class="cz-order-id">Order ID: <span id="cz-order-id">CZ123456</span></p>
+                </div>
+                
+                <div class="cz-order-summary">
+                    <h4>Order Summary</h4>
+                    <div class="cz-order-items" id="cz-order-items">
+                        <!-- Order items rendered by JS -->
+                    </div>
+                    <div class="cz-order-total">
+                        <span>Total Paid</span>
+                        <span id="cz-order-total">₹0</span>
+                    </div>
+                    <div class="cz-order-method">
+                        <span>Payment Method</span>
+                        <span id="cz-order-method">-</span>
+                    </div>
+                </div>
+                
+                <div class="cz-order-delivery">
+                    <p>🚚 Estimated delivery: <strong>3-5 business days</strong></p>
+                </div>
+                
+                <button class="cz-button cz-button-primary cz-button-full" id="cz-order-done-btn">Continue Shopping</button>
+            </div>
+        </div>
     </div>
 
     <!-- Login/Signup Modal -->
